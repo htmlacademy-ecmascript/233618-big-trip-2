@@ -313,6 +313,7 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   reset(point) {
+    this.element.querySelectorAll('input').forEach((input) => input.blur());
     this.updateElement(EditPointView.parseStateToPoint(point));
   }
 }
