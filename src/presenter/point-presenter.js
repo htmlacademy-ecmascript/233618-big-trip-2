@@ -61,6 +61,7 @@ export default class PointPresenter {
       offers: this.#offersList,
       onFormSubmit: this.#handleFormSubmit,
       onCloseClick: this.#closeEditPointForm,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     this.#offersPresenter = new OffersPresenter({
@@ -126,9 +127,22 @@ export default class PointPresenter {
     }
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
+  #handleFormSubmit = (update) => {
+    const isPatchUpdate =
+      this.#point.startDateTime === update.startDateTime &&
+      this.#point.endDateTime === update.endDateTime &&
+      this.#point.price === update.price;
+
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
+      update,
+    );
     this.#closeEditPointForm();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(UserAction.DELETE_POINT, UpdateType.MINOR, point);
   };
 
   #closeEditPointForm = () => {
