@@ -20,7 +20,7 @@ const SortType = {
   OFFER: 'offer',
 };
 
-const FiterType = {
+const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PRESENT: 'present',
@@ -42,7 +42,7 @@ const UpdateType = {
 export {
   EVENT_TYPES,
   DEFAULT_TYPE,
-  FiterType,
+  FilterType,
   SortType,
   UserAction,
   UpdateType,

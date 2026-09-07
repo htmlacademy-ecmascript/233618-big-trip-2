@@ -3,6 +3,7 @@ import TripListView from '../view/trip-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
 import { render, RenderPosition, remove } from '../framework/render.js';
+import { filter } from '../utils/filter.js';
 import { SortType, UserAction, UpdateType } from '../const.js';
 import {
   sortPointsByDate,
@@ -18,29 +19,42 @@ export default class TripPresenter {
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+  #filterModel = null;
   #pointPresenters = new Map();
   #currentSortType = SortType.DATE;
 
-  constructor({ tripContainer, pointsModel, offersModel, destinationsModel }) {
+  constructor({
+    tripContainer,
+    pointsModel,
+    offersModel,
+    destinationsModel,
+    filterModel,
+  }) {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
+    this.#filterModel = filterModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DATE:
-        return [...this.#pointsModel.points.sort(sortPointsByDate)];
+        return filteredPoints.sort(sortPointsByDate);
       case SortType.TIME:
-        return [...this.#pointsModel.points.sort(sortPointsByTime)];
+        return filteredPoints.sort(sortPointsByTime);
       case SortType.PRICE:
-        return [...this.#pointsModel.points.sort(sortPointsByPrice)];
+        return filteredPoints.sort(sortPointsByPrice);
     }
 
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   get offers() {

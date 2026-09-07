@@ -4,14 +4,12 @@ import isBetween from 'dayjs/plugin/isBetween.js';
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-import FilterView from './view/filter-view.js';
 import TripPresenter from './presenter/trip-presenter.js';
+import FilterPresenter from './presenter/filter-presenter.js';
 import PointsModel from './model/points-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import FilterModel from './model/filter-model.js';
-import { render } from './framework/render.js';
-import { genereteFilter } from './mock/filter.js';
 
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
@@ -25,8 +23,14 @@ const tripPresenter = new TripPresenter({
   pointsModel,
   offersModel,
   destinationsModel,
+  filterModel,
 });
 
-const filters = genereteFilter(pointsModel.points);
-render(new FilterView({ filters }), filterElement);
+const filterPresenter = new FilterPresenter({
+  filterContainer: filterElement,
+  filterModel,
+  pointsModel,
+});
+
+filterPresenter.init();
 tripPresenter.init();
