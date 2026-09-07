@@ -10,9 +10,15 @@ import PointsModel from './model/points-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import FilterModel from './model/filter-model.js';
+import NewPointButtonView from './view/new-point-button-view.js';
+import { render } from './framework/render.js';
 
-const filterElement = document.querySelector('.trip-controls__filters');
+const siteHeaderElement = document.querySelector('.trip-main');
+const filterElement = siteHeaderElement.querySelector(
+  '.trip-controls__filters',
+);
 const tripEventsElement = document.querySelector('.trip-events');
+
 const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
@@ -24,6 +30,7 @@ const tripPresenter = new TripPresenter({
   offersModel,
   destinationsModel,
   filterModel,
+  onNewPointDestroy: handleNewPointFormClose,
 });
 
 const filterPresenter = new FilterPresenter({
@@ -32,5 +39,19 @@ const filterPresenter = new FilterPresenter({
   pointsModel,
 });
 
+const newPointButtonComponent = new NewPointButtonView({
+  onClick: handleNewPointButtonClick,
+});
+
+function handleNewPointFormClose() {
+  newPointButtonComponent.element.disabled = false;
+}
+
+function handleNewPointButtonClick() {
+  tripPresenter.createPoint();
+  newPointButtonComponent.element.disabled = true;
+}
+
+render(newPointButtonComponent, siteHeaderElement);
 filterPresenter.init();
 tripPresenter.init();
