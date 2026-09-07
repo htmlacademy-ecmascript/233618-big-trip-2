@@ -1,3 +1,4 @@
+import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
@@ -59,10 +60,10 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
                            id="event-destination-1"
                            type="text"
                            name="event-destination"
-                           value="${destination ? destination.title : ''}"
+                           value="${he.encode(destination.title)}"
                            list="destination-list-1">
                     <datalist id="destination-list-1">
-                      ${destinations.map((dest) => `<option value="${dest.title}"></option>`).join('')}
+                      ${destinations.map((dest) => `<option value="${he.encode(dest.title)}"></option>`).join('')}
                     </datalist>
                   </div>
                   <div class="event__field-group  event__field-group--time">
@@ -71,14 +72,14 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
                            id="event-start-time-1"
                            type="text"
                            name="event-start-time"
-                           value="${startDateTime ? humanizePointDateTime(startDateTime, DATE_TIME_FORMAT) : ''}">
+                           value="${he.encode(humanizePointDateTime(startDateTime, DATE_TIME_FORMAT))}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
                     <input class="event__input  event__input--time"
                            id="event-end-time-1"
                            type="text"
                            name="event-end-time"
-                           value="${endDateTime ? humanizePointDateTime(endDateTime, DATE_TIME_FORMAT) : ''}">
+                           value="${he.encode(humanizePointDateTime(endDateTime, DATE_TIME_FORMAT))}">
                   </div>
                   <div class="event__field-group  event__field-group--price">
                     <label class="event__label" for="event-price-1">
@@ -92,7 +93,7 @@ const createEditPointTemplate = (point, destinations, isNewPoint) => {
                            value="${point.price}">
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">${isNewPoint ? 'Delete' : 'Cancel'}</button>
+                  <button class="event__reset-btn" type="reset">${isNewPoint ? 'Cancel' : 'Delete'}</button>
                   ${createOpenEventButtonTemplate(isNewPoint)}
                 </header>
                 <section class="event__details">
